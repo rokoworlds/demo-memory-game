@@ -7,6 +7,15 @@ const [isGameOn, setIsGameOn] = useState(false);
 const [emojiData, setEmojiData] = useState([]);
 const [selectedCards, setSelectedCards] = useState([]);
 const [matchedCards, setMatcedCards] = useState([]);
+const [isGameOver, setGameOver] = useState(false);
+
+useEffect(() => {
+  if (emojiData && matchedCards.length === emojiData.length) {
+    setGameOver(true);
+    console.log(`GAME OVER: ${isGameOver}`)
+  }
+}, [matchedCards])
+
 
 useEffect(() => {
   if (selectedCards.length === 2 && selectedCards[0].name === selectedCards[1].name) {
@@ -96,10 +105,3 @@ function turnCard(name, index){
 }
 
 export default App
-    
-    /**
-     * Challenge:
-     * 2) If "selectedCards" contain two matching cards, use the useEffect hook to add these card objects to "matchedCards". Make sure to not override the previous state of "matchedCards".
-     * 💡 Hint: Use the array spread operator to solve step 2.
-     */
-    
