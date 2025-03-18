@@ -1,10 +1,20 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Form from "./components/Form";
 import MemoryCard from "./components/MemoryCard";
 
 function App() {
 const [isGameOn, setIsGameOn] = useState(false);
 const [emojiData, setEmojiData] = useState([]);
+const [selectedCards, setSelectedCards] = useState([]);
+const [matchedCards, setMatcedCards] = useState([]);
+
+useEffect(() => {
+  if (selectedCards.length === 2 && selectedCards[0].name === selectedCards[1].name) {
+    setMatcedCards(prev => [...prev, ...selectedCards])
+  }
+}, [selectedCards])
+
+console.log(matchedCards)
 
 async function startGame(e) {
   e.preventDefault();
@@ -63,10 +73,16 @@ function getEmojisArray(data) {
   return pairedEmojisArray
 }
 
-function turnCard(){
-  console.log("Memory card clicked");
-}
 
+function turnCard(name, index){
+  let selectedCardEntry = selectedCards.find(emoji => emoji.index === index);
+
+  if (!selectedCardEntry && selectedCards.length < 2) {
+    setSelectedCards(prev => [...prev, {name, index}]);
+  } else if (!selectedCardEntry && selectedCards.length === 2) {
+    setSelectedCards([{name, index}]);
+  }
+}
 
   return (
     <>
@@ -80,13 +96,10 @@ function turnCard(){
 }
 
 export default App
-
+    
     /**
      * Challenge:
-
-     * 3) Map over "randomIndices" and use the random numbers stored in this array to create a new array of random emojis selected from "data". Store this new array in a variable called "dataSlice" and return it at the bottom of the function.
-     * 4) Inside the try block of the "startGame" function, make a call to "getDataSlice", passing "data" as an argument. Save the return value in a variable called "dataSlice".
-     * 5) Delete the "dataSample" variable and replace "dataSample" with the new "dataSlice" variable in the "setEmojisData" function.
-     * 6) Run the code and start a new game to check that your code is working.
-    */  
+     * 2) If "selectedCards" contain two matching cards, use the useEffect hook to add these card objects to "matchedCards". Make sure to not override the previous state of "matchedCards".
+     * 💡 Hint: Use the array spread operator to solve step 2.
+     */
     
