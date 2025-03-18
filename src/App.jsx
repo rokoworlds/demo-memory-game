@@ -9,8 +9,6 @@ const [selectedCards, setSelectedCards] = useState([]);
 const [matchedCards, setMatcedCards] = useState([]);
 const [isGameOver, setGameOver] = useState(false);
 
-console.log(matchedCards)
-
 useEffect(() => {
   if (emojiData && matchedCards.length === emojiData.length) {
     setGameOver(true);
@@ -92,12 +90,6 @@ function turnCard(name, index){
     setSelectedCards([{name, index}]);
   }
 }
-
-    /**
-     * Challenge:
-     * 1) Pass "selectedCards" and "matchedCards" as props to "MemoryCard".
-     */
-    
 
   return (
     <>
