@@ -9,6 +9,8 @@ const [selectedCards, setSelectedCards] = useState([]);
 const [matchedCards, setMatcedCards] = useState([]);
 const [isGameOver, setGameOver] = useState(false);
 
+console.log(matchedCards)
+
 useEffect(() => {
   if (emojiData && matchedCards.length === emojiData.length) {
     setGameOver(true);
@@ -22,8 +24,6 @@ useEffect(() => {
     setMatcedCards(prev => [...prev, ...selectedCards])
   }
 }, [selectedCards])
-
-console.log(matchedCards)
 
 async function startGame(e) {
   e.preventDefault();
@@ -93,12 +93,23 @@ function turnCard(name, index){
   }
 }
 
+    /**
+     * Challenge:
+     * 1) Pass "selectedCards" and "matchedCards" as props to "MemoryCard".
+     */
+    
+
   return (
     <>
       <main>
         <h1>Memory Game</h1>
         {!isGameOn && <Form handleSubmit={startGame} />}
-        {isGameOn && <MemoryCard data={emojiData} handleClick={turnCard} />}
+        {isGameOn && <MemoryCard 
+          data={emojiData}
+          handleClick={turnCard} 
+          selectedCards={selectedCards}
+          matchedCards={matchedCards}
+          />}
       </main>
     </>
   )
