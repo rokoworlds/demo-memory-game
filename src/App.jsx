@@ -3,6 +3,7 @@ import Form from "./components/Form";
 import MemoryCard from "./components/MemoryCard";
 import AssistiveTechInfo from "./components/AssistiveTechInfo";
 import GameOver from "./components/GameOver";
+import ErrorCard from "./components/ErrorCard";
 
 function App() {
 const [isGameOn, setIsGameOn] = useState(false);
@@ -10,6 +11,7 @@ const [emojiData, setEmojiData] = useState([]);
 const [selectedCards, setSelectedCards] = useState([]);
 const [matchedCards, setMatcedCards] = useState([]);
 const [areAllCardsMatched, setAreAllCardsMatched] = useState(false);
+const [isError, setIsError] = useState(false)
 
 useEffect(() => {
   if (emojiData.length && matchedCards.length === emojiData.length) {
@@ -25,10 +27,16 @@ useEffect(() => {
   }
 }, [selectedCards])
 
+console.log(isError)
+
 async function startGame(e) {
   e.preventDefault();
 
   try {
+
+    throw new Error('error is OUT bitch!');
+
+
     const response = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature");
     
     if (!response.ok) {
@@ -43,6 +51,7 @@ async function startGame(e) {
     setIsGameOn(true);
 
   } catch (error) {
+    setIsError(true)
     console.error(error.message);
   }
 }
@@ -98,11 +107,15 @@ function turnCard(name, index){
     setAreAllCardsMatched(false)
   }
 
+  function resetError() {
+    setIsError(false)
+  }
+
   return (
     <>
       <main>
         <h1>Memory Game</h1>
-        {!isGameOn && <Form handleSubmit={startGame} />}
+        {!isGameOn && !isError && <Form handleSubmit={startGame} />}
 
         {isGameOn && !areAllCardsMatched && 
           <AssistiveTechInfo 
@@ -122,6 +135,8 @@ function turnCard(name, index){
           selectedCards={selectedCards}
           matchedCards={matchedCards}
           />}
+
+          {isError && <ErrorCard handleClick={resetError} />}
       </main>
     </>
   )
