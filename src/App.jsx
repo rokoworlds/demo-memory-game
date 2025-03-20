@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react"
 import Form from "./components/Form";
 import MemoryCard from "./components/MemoryCard";
+import AssistiveTechInfo from "./components/AssistiveTechInfo";
+import GameOver from "./components/GameOver";
 
 function App() {
 const [isGameOn, setIsGameOn] = useState(false);
 const [emojiData, setEmojiData] = useState([]);
 const [selectedCards, setSelectedCards] = useState([]);
 const [matchedCards, setMatcedCards] = useState([]);
-const [isGameOver, setGameOver] = useState(false);
+const [areAllCardsMatched, setAreAllCardsMatched] = useState(false);
 
 useEffect(() => {
-  if (emojiData && matchedCards.length === emojiData.length) {
-    setGameOver(true);
-    console.log(`GAME OVER: ${isGameOver}`)
+  if (emojiData.length && matchedCards.length === emojiData.length) {
+    setAreAllCardsMatched(true);
+    console.log(`GAME OVER: ${areAllCardsMatched}`)
   }
 }, [matchedCards])
 
@@ -89,11 +91,31 @@ function turnCard(name, index){
   }
 }
 
+  function resetGame() {
+    setIsGameOn(true);
+    setSelectedCards([])
+    setMatcedCards([])
+    setAreAllCardsMatched(false)
+  }
+
   return (
     <>
       <main>
         <h1>Memory Game</h1>
         {!isGameOn && <Form handleSubmit={startGame} />}
+
+        {isGameOn && !areAllCardsMatched && 
+          <AssistiveTechInfo 
+            emojisData={emojiData} 
+            mathcedCards={matchedCards}
+            />
+        }
+
+        {areAllCardsMatched && 
+          <GameOver
+            handleClick={resetGame}
+          />}
+        
         {isGameOn && <MemoryCard 
           data={emojiData}
           handleClick={turnCard} 
