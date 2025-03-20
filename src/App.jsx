@@ -6,6 +6,11 @@ import GameOver from "./components/GameOver";
 import ErrorCard from "./components/ErrorCard";
 
 function App() {
+
+  const initialFormData = {category: "animals-and-nature", number: 10}
+
+  const [formData, setFormData] = useState(initialFormData)
+
 const [isGameOn, setIsGameOn] = useState(false);
 const [emojiData, setEmojiData] = useState([]);
 const [selectedCards, setSelectedCards] = useState([]);
@@ -27,17 +32,15 @@ useEffect(() => {
   }
 }, [selectedCards])
 
-console.log(isError)
+function handleFormChange(e) {
+  setFormData(prev => ({...prev, [e.target.name] : e.target.value}))
+}
 
 async function startGame(e) {
   e.preventDefault();
 
   try {
-
-    throw new Error('error is OUT bitch!');
-
-
-    const response = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature");
+    const response = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`);
     
     if (!response.ok) {
       throw new Error('Could not fetch data from API');
@@ -66,7 +69,7 @@ function getRandomIndices(data) {
   const max = data.length;
   const randomIndicesArray = [];
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < formData.number / 2; i++) {
     const newId = Math.floor(Math.random() * max);
     if (!(newId in randomIndicesArray)) {
       randomIndicesArray.push(newId)
@@ -111,11 +114,12 @@ function turnCard(name, index){
     setIsError(false)
   }
 
+
   return (
     <>
       <main>
         <h1>Memory Game</h1>
-        {!isGameOn && !isError && <Form handleSubmit={startGame} />}
+        {!isGameOn && !isError && <Form handleSubmit={startGame} handleChange={handleFormChange} />}
 
         {isGameOn && !areAllCardsMatched && 
           <AssistiveTechInfo 
