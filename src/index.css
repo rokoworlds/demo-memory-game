@@ -1,4 +1,4 @@
-* {
+ * {
     margin: 0;
 }
 
@@ -8,7 +8,7 @@
     --light-secondary: #cbd5e1;
     --accent: #fde68a;
     --btn-disabled: #a8a29e;
-}
+} 
 
 /*===========================
 Layout
@@ -20,6 +20,8 @@ body {
     text-align: center;
     min-height: 100vh;
 }
+
+
 
 main {
     display: flex;
@@ -244,4 +246,4 @@ Media queries
     .card-container {
         grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
     }
-}
+} 
